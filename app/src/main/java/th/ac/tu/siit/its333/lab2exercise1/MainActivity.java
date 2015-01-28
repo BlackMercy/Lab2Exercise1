@@ -30,12 +30,31 @@ public class MainActivity extends ActionBarActivity {
 
     public void recalculate() {
         //Calculate the expression and display the output
-
         //Split expr into numbers and operators
         //e.g. 123+45/3 --> ["123", "+", "45", "/", "3"]
         //reference: http://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
         String e = expr.toString();
         String[] tokens = e.split("((?<=\\+)|(?=\\+))|((?<=\\-)|(?=\\-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))");
+        double result = Double.parseDouble(tokens[0]);
+        for(int i = 0;i < expr.length()-1;i++){
+            if(i % 2 == 1){
+                char x = tokens[i].charAt(0);
+                if(x == '+'){
+                    result += Double.parseDouble(tokens[i+1]);
+                }
+                else if (x == '-'){
+                    result -= Double.parseDouble(tokens[i+1]);
+                }
+                else if (x == '*'){
+                    result *= Double.parseDouble(tokens[i+1]);
+                }
+                else if (x == '/'){
+                    result /= Double.parseDouble(tokens[i+1]);
+                }
+            }
+        }
+        TextView tvAns = (TextView)findViewById(R.id.tvAns);
+        tvAns.setText(Double.toString(result));
     }
 
     public void digitClicked(View v) {
@@ -52,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
     public void operatorClicked(View v) {
 
         String o = ((TextView)v).getText().toString();
-        if (expr.length() > 0 && !isOperand(expr.charAt(expr.length()-1))){
+        if (expr.length() > 0 && !isOperand(expr.charAt(expr.length() - 1))){
             expr.append(o);
             updateExprDisplay();
         } else {
@@ -67,7 +86,6 @@ public class MainActivity extends ActionBarActivity {
 
     private boolean isOperand(char c){
         return c == '+' || c == '-' || c == '*' || c == '/';
-
     }
 
     public void ACClicked(View v) {
@@ -86,6 +104,15 @@ public class MainActivity extends ActionBarActivity {
             expr.deleteCharAt(expr.length()-1);
             updateExprDisplay();
         }
+    }
+
+    public void EqClicked (View v) {
+        //expr = new StringBuffer();
+        updateExprDisplay();
+        //Display a toast that the value is cleared
+        Toast t = Toast.makeText(this.getApplicationContext(),
+                expr, Toast.LENGTH_SHORT);
+        t.show();
     }
 
     @Override
