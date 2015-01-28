@@ -50,9 +50,24 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void operatorClicked(View v) {
+
+        String o = ((TextView)v).getText().toString();
+        if (expr.length() > 0 && !isOperand(expr.charAt(expr.length()-1))){
+            expr.append(o);
+            updateExprDisplay();
+        } else {
+
+        }
+
         //IF the last character in expr is not an operator and expr is not "",
+
         //THEN append the clicked operator and updateExprDisplay,
         //ELSE do nothing
+    }
+
+    private boolean isOperand(char c){
+        return c == '+' || c == '-' || c == '*' || c == '/';
+
     }
 
     public void ACClicked(View v) {
